@@ -47,6 +47,9 @@ class Delete extends Button
         /* @var DataObject|Versioned $record */
         $record = $this->getGridFieldRequest()->getRecord();
 
-        return !$record->isPublished() && $record->canDelete();
+        // This prevents failure in case the record is not versioned, but maybe we should
+        // also allow $record->hasExtension('Versioned') to be false. So this should be
+        // return ( ! $record->hasExtension('Versioned') || ! $record->isPublished()) && $record->canDelete();
+        return $record->hasExtension('Versioned') && !$record->isPublished() && $record->canDelete();
     }
 }
